@@ -8,21 +8,21 @@
 
 <table width="1000" background="img/aa.jpg" height="5" >
 	<tr height="50">
-		<td align="left" width="600" ><a href="ShoppingMain.jsp" >
+		<td align="left" width="500" ><a href="ShoppingMain.jsp" >
 		<img alt="" src="img/logo.JPG" border="0" align="left"> </a>
 		</td>
 		<c:set var="mbean"  value="${mbean}" />
 		
 		<c:if test="${mbean==null }">
-		<td align="right" width="200" >
+		<td align="right" width="300" >
 		<input type="button" onclick="location.href='login.do'" value="로그인">
 		&nbsp;&nbsp;&nbsp;
 		<input type="button" onclick="location.href='joinform.do'" value="회원가입">		 
 		</td>		
 		</c:if>
 		<c:if test="${mbean!=null }">
-		<td align="right" width="250" >
-		<font size="3" color="white"> ${mbean.memid } 님 환영 합니다.</font>
+		<td align="right" width="300" >
+		<font size="3" color="white"> ${mbean.memid } 님 환영 합니다.</font>&nbsp;&nbsp;
 		<input type="button" value="로그아웃" onclick="location.href='logout.do'">
 		</td>
 		</c:if>

@@ -49,6 +49,21 @@ public class Cart implements Serializable{
 	public void clearCart(){
 		itemlist = new  ArrayList<SuCartBean>();
 	}
+
+	// itemlist에서 하나의 상품을 삭제하는 메소드
+	public void delete(String name) {
+		//반복문을 돌면서 
+		for (int i = 0; i < itemlist.size(); i++) {
+			//빈클래스를 리턴 받아서
+			SuCartBean bean = itemlist.get(i);
+			//삭제 하고자 하는 이름이 있다면 그해당번지를 list에서 삭제함
+			if(bean.getSuname().equals(name)){
+				itemlist.remove(i);
+				break;
+			}
+		}
+		
+	}
 	
 }
 

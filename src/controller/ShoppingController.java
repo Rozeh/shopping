@@ -10,6 +10,7 @@ import model.SuBean;
 import model.SuCartBean;
 import model.SutoolDAO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -207,18 +208,24 @@ public class ShoppingController {
 
 	//수동 공구 제품구매하기
 	@RequestMapping("/sutoolbuy.do")
-	public ModelAndView sutoolBuy(SuBean subean, HttpSession session){
+	public ModelAndView sutoolBuy(SuBean subean, 
+			int suqty, HttpSession session){
 
 		ModelAndView mav = new ModelAndView();
-		//회원 정보를 사용하기위한 설정
+		//회원 정보를 사용하기위한 설정 = 로그인이 안되었을경우
 		MemberBean mbean = (MemberBean) session.getAttribute("mbean");
 		if(mbean == null){
-
 			mav.addObject("msg","2");
-			mav.addObject("center","MemberJoinForm.jsp");
+			mav.addObject("center","MemberLogin.jsp");
 			mav.addObject("left","SujakLeft.jsp");
 			mav.setViewName("ShoppingMain");
-
+			//로그인된 상태에서 구매버튼을 눌렸다면
+		}else{
+			mav.addObject("bean", subean);
+			mav.addObject("qty", suqty);
+			mav.addObject("center","BuyItem.jsp");
+			mav.addObject("left","SujakLeft.jsp");
+			mav.setViewName("ShoppingMain");		
 		}
 
 		return mav;
@@ -265,45 +272,108 @@ public class ShoppingController {
 
 		return mav;
 	}
-	
-	@RequestMapping("/login.do")
-	 public ModelAndView login(){
-	  ModelAndView mav = new ModelAndView();
-	  mav.addObject("center","MemberLogin.jsp");
-	  mav.addObject("left","SujakLeft.jsp");
-	  mav.setViewName("ShoppingMain");
-	  return mav;
-	 }
-	
-	 @RequestMapping("/loginproc.do")
-	 public ModelAndView loginProc(HttpSession session , MemberBean mbean){
-	  ModelAndView mav = new ModelAndView();
-	  //데이터 베이스에 접근해서 해당 아이디와 패스워드가 있는지를 파악해줌
-	  //데이터 베이스에 아이디와 패스워드가 일치 할경우
-	  int result = sutoolDao.getLogin(mbean);
-	  if(result==1){   
-	   //로그인을 유지 시키려면 Session객체를 사용하시오
-	   session.setAttribute("mbean", mbean);
-	   return new ModelAndView(new RedirectView("index.do"));
-	  }
-	  else {//로그인정보가 틀릴경우
-	   mav.addObject("center","MemberLogin.jsp");
-	   mav.addObject("left","SujakLeft.jsp");
-	   mav.setViewName("ShoppingMain");
-	   mav.addObject("login" ,"1"); 
-	   return mav;
-	  }  
-	
-	 }
-	 @RequestMapping("/logout.do")
-	 public ModelAndView logoutProc(HttpSession session){
-		 //회원정보를 얻어오기위한 설정
-		 MemberBean mbean = (MemberBean)session.getAttribute("mbean"); 
-		 session.setAttribute("mbean", null);
-		 return new ModelAndView(new RedirectView("index.do"));
-	 }
-}
 
+	//회원 로그인 폼
+	@RequestMapping("/login.do")
+	public ModelAndView login(){
+
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("center","MemberLogin.jsp");
+		mav.addObject("left","SujakLeft.jsp");
+		mav.setViewName("ShoppingMain");
+
+		return mav;
+	}
+
+	//회원 로그인 처리
+	@RequestMapping("/loginproc.do")
+	public ModelAndView loginProc(HttpSession session , MemberBean mbean){
+
+		ModelAndView mav = new ModelAndView();
+		//데이터 베이스에 접근해서 해당 아이디와 패스워드가 있는지를 파악해줌
+		//데이터 베이스에 아이디와 패스워드가 일치 할경우
+		int result = sutoolDao.getLogin(mbean);
+		if(result==1){			
+			//로그인을 유지 시키려면 Session객체를 사용하시오
+			session.setAttribute("mbean",mbean);
+			return new ModelAndView(new RedirectView("index.do"));
+		}else {//로그인정보가 틀릴경우
+			mav.addObject("center","MemberLogin.jsp");
+			mav.addObject("left","SujakLeft.jsp");
+			mav.setViewName("ShoppingMain");
+			mav.addObject("login" ,"1");	
+			return mav;
+		}		
+	}
+
+	//회원 로그아웃 처리
+	@RequestMapping("/logout.do")
+	public ModelAndView logOut(HttpSession session){	
+		ModelAndView mav = new ModelAndView();		
+		//회원 정보를 사용하기위한 설정
+		MemberBean mbean = (MemberBean) session.getAttribute("mbean");
+		session.setAttribute("mbean", null);//회원정보에 null값을 대입
+
+		return new ModelAndView(new RedirectView("index.do"));
+
+	}
+
+	//회원 가입 처리
+	@RequestMapping("/joinform.do")
+	public ModelAndView joinForm(HttpSession session){
+
+		ModelAndView mav = new ModelAndView();	
+
+		mav.addObject("center","MemberJoinForm.jsp");
+		mav.addObject("left","SujakLeft.jsp");
+		mav.setViewName("ShoppingMain");
+		return mav;
+	}
+
+	//카트에 담긴 물건을 구매하기위한 메소드
+	@RequestMapping("/cartbuy.do")
+	public ModelAndView cartBuy(HttpSession session){
+
+		ModelAndView mav = new ModelAndView();	
+		MemberBean mbean = (MemberBean) session.getAttribute("mbean");
+		if(mbean == null){//top.jsp 에서 로그인 정보를 처리하기위한 소스
+			mav.addObject("msg","2");
+			mav.addObject("center","MemberLogin.jsp");
+			mav.addObject("left","SujakLeft.jsp");
+			mav.setViewName("ShoppingMain");
+		}else{
+			//카트를 사용하기위한 설정
+			Cart cart = (Cart) session.getAttribute("cart");			
+			mav.addObject("cart", cart);
+			mav.addObject("center","BuyItem.jsp");
+			mav.addObject("left","SujakLeft.jsp");
+			mav.addObject("mbean",mbean);
+			mav.setViewName("ShoppingMain");
+		}		
+		return mav;
+	}
+
+	
+	//카트의 하나의 아이템을 삭제하는 메소드
+	@RequestMapping("/cartdel.do")
+	public ModelAndView cartDel(String name , HttpSession session){
+
+		//카트를 사용하기위한 설정
+		Cart cart = (Cart) session.getAttribute("cart");
+		//카트에 상품을 삭제
+		cart.delete(name);
+		//카트의 내용을 보여주는 jsp페이지 호출
+		ModelAndView mav = new ModelAndView();
+
+		mav.addObject("cart", cart);
+		mav.addObject("center","CartResult.jsp");
+		mav.addObject("left","SujakLeft.jsp");
+		mav.setViewName("ShoppingMain");	
+		return mav;
+
+	}
+	
+}
 
 
 

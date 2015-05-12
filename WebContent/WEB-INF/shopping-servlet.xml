@@ -31,13 +31,18 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
  	p:sutoolDao-ref="sutoolDao" />
  <bean id="index" name="/index.do"  class="controller.ShoppingController"
  	p:sutoolDao-ref="sutoolDao" />	
-  <bean id="login" name="/login.do"  class="controller.ShoppingController"
-  p:sutoolDao-ref="sutoolDao" /> 
+ <bean id="login" name="/login.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />	
  <bean id="loginproc" name="/loginproc.do"  class="controller.ShoppingController"
-  p:sutoolDao-ref="sutoolDao" /> 
- <bean id="logout" name="/logout.do" class="controller.ShoppingController"
-  p:sutoolDao-ref="sutoolDao" />
- 
+ 	p:sutoolDao-ref="sutoolDao" />		
+ <bean id="logout" name="/logout.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />	
+ <bean id="joinform" name="/joinform.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="cartbuy" name="/cartbuy.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="cartdel" name="/cartdel.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
 <!-- 스프링에서 파일 다운할 클래스를 선언  --> 
 <!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
 	<property name="order">

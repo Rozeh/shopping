@@ -43,7 +43,7 @@ public class SutoolDAO {
 		String sql = "select * from sutool where no=?";
 		RowMapper<SuBean> rm =
 				new BeanPropertyRowMapper<SuBean>(SuBean.class);
-				
+
 		return template.queryForObject(sql, rm, no);
 	}
 
@@ -52,7 +52,7 @@ public class SutoolDAO {
 		String sql = "select * from sutool where no=?";
 		RowMapper<SuCartBean> rm =
 				new BeanPropertyRowMapper<SuCartBean>(SuCartBean.class);
-				
+
 		return template.queryForObject(sql, rm, no);
 	}
 	//전동 모든 공구
@@ -75,31 +75,34 @@ public class SutoolDAO {
 		String sql = "select * from autotool where autonum=?";
 		RowMapper<AutoBean> rm =
 				new BeanPropertyRowMapper<AutoBean>(AutoBean.class);
-				
+
 		return template.queryForObject(sql, rm, no);
 	}
 
 	//한사람에 대한 회원 정보를 저장하는 메소드
-	 public void insertMember(MemberBean bean){
-	  //쿼리를 준비
-	  String sql="insert into springmember values"
-	    + "(:memid,:passwd,:name,:phone,:address,:birthday,'d',"
-	    + ":email,sysdate,:gender,:job)";
-	  //빈클래스가 쿼리문에 1:1맵핑되도록 자동설정
-	  SqlParameterSource sqlsource = new BeanPropertySqlParameterSource(bean);
-	  //쿼리 실행하시오
-	  template.update(sql, sqlsource);
+	public void insertMember(MemberBean bean){
+		//쿼리를 준비
+		String sql="insert into springmember values"
+				+ "(:memid,:passwd,:name,:phone,:address,:birthday,'d',"
+				+ ":email,sysdate,:gender,:job)";
+		//빈클래스가 쿼리문에 1:1맵핑되도록 자동설정
+		SqlParameterSource sqlsource = new BeanPropertySqlParameterSource(bean);
+		//쿼리 실행하시오
+		template.update(sql, sqlsource);
 
-	 }
-	 //회원 로그인처리 메소드
-	 public int getLogin(MemberBean mbean) {
-	  //쿼리준비
-	  String sql ="select count(*) from springmember where memid=? and passwd=?";
-	  return template.queryForInt(sql, mbean.getMemid(), mbean.getPasswd());
-	 }
-		
+
+	}
+
+	//회원 로그인처리 메소드
+	public int getLogin(MemberBean mbean) {
+		//쿼리준비
+		String sql ="select count(*) from springmember where memid=? and passwd=?";
+
+		return template.queryForInt(sql, mbean.getMemid(), mbean.getPasswd());
+
+	}
+
 }
-
 
 
 
