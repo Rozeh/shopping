@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:p="http://www.springframework.org/schema/p"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+<!-- 컨트롤러 클래스들을 선언 -->
+
+ <bean id="sujak" name="/sujak.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ 
+ <bean id="suinfo" name="/suinfo.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="sutoolcart" name="/sutoolcart.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="stanlyinfo" name="/stanlyinfo.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="tooluse" name="/tooluse.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="jundong" name="/jundong.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="autoinfo" name="/autoinfo.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="autotoolcart" name="/autotoolcart.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="sutoolbuy" name="/sutoolbuy.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="joinproc" name="/joinproc.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />
+ <bean id="index" name="/index.do"  class="controller.ShoppingController"
+ 	p:sutoolDao-ref="sutoolDao" />	
+  <bean id="login" name="/login.do"  class="controller.ShoppingController"
+  p:sutoolDao-ref="sutoolDao" /> 
+ <bean id="loginproc" name="/loginproc.do"  class="controller.ShoppingController"
+  p:sutoolDao-ref="sutoolDao" /> 
+ <bean id="logout" name="/logout.do" class="controller.ShoppingController"
+  p:sutoolDao-ref="sutoolDao" />
+ 
+<!-- 스프링에서 파일 다운할 클래스를 선언  --> 
+<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	<property name="order">
+	<value>0</value>
+	</property>
+</bean>
+<bean id="downloadView"  class="controller.DownloadView" />
+  -->
+ 
+ 
+<!-- Jsp 설정 (서블릿클래스에서 jsp호출할때 필요한 설정 부분 --> 
+<bean id="viewResolver" 
+class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+ <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+
+ <property name="suffix" value=".jsp" /> 
+ </bean>
+ 	
+<!--  스프링에서 파일 업로드할 클래스를 선언 -->
+<!-- <bean id="multipartResolver" 
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<property name="defaultEncoding" value="euc-kr" />
+	<property name="maxUploadSize" value="5000000" />
+	
+</bean> -->
+
+
+
+ <!-- 데이터 베이스 연결 클래스 등록 -->
+ <bean id="sutoolDao" class="model.SutoolDAO"  p:dataSource-ref="dataSource"  /> 
+ 
+ <!-- 데이터 베이스 설정(오라클용 데이터 베이스) -->
+ <bean id="dataSource" 
+ class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ <!--각종 오라클 설정  -->
+ <property name="driverClassName">
+ 	<value>oracle.jdbc.driver.OracleDriver</value>
+ </property>
+ <property name="url">
+ 	<value>jdbc:oracle:thin:@210.109.31.221:1521:XE</value>
+ </property>
+ <property name="username">
+ 	<value>system</value>
+ </property>
+ <property name="password">
+ 	<value>123456</value>
+ </property>
+ </bean>
+ 
+ 	
+</beans>
+
+
+
+
+
+
+
+
+
